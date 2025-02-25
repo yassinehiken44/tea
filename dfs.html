@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Football Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .quiz-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 350px;
+            text-align: center;
+            opacity: 0;
+            animation: fadeIn 1s forwards;
+        }
+        .question {
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+        .answers {
+            list-style: none;
+            padding: 0;
+        }
+        .answers li {
+            margin: 10px 0;
+            padding: 8px;
+            background-color: #f4f4f4;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .answers li:hover {
+            background-color: #ddd;
+        }
+        .result {
+            font-size: 20px;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .btn:hover {
+            background-color: #45a049;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <div id="quiz">
+            <div class="question" id="question-text">Loading Question...</div>
+            <ul class="answers" id="answer-list"></ul>
+            <button class="btn" onclick="submitAnswer()">Next Question</button>
+        </div>
+        <div id="result" class="result" style="display: none;"></div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "Who won the 2018 FIFA World Cup?",
+                options: ["France", "Germany", "Brazil", "Argentina"],
+                correctAnswer: "France"
+            },
+            {
+                question: "Who is known as 'The Egyptian King' in football?",
+                options: ["Mohamed Salah", "Cristiano Ronaldo", "Lionel Messi", "Neymar"],
+                correctAnswer: "Mohamed Salah"
+            },
+            {
+                question: "Which country is known as the birthplace of football?",
+                options: ["England", "Germany", "Brazil", "Argentina"],
+                correctAnswer: "England"
+            },
+            // Add more questions here (add up to 100 questions)
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        // Function to display the question and options
+        function displayQuestion() {
+            if (currentQuestionIndex >= questions.length) {
+                showResult();
+                return;
+            }
+
+            const currentQuestion = questions[currentQuestionIndex];
+            document.getElementById("question-text").innerText = currentQuestion.question;
+            const answerList = document.getElementById("answer-list");
+            answerList.innerHTML = "";
+
+            currentQuestion.options.forEach(option => {
+                const li = document.createElement("li");
+                li.innerText = option;
+                li.onclick = () => handleAnswer(option);
+                answerList.appendChild(li);
+            });
+
+            // Animation for fading in the question
+            document.getElementById("quiz").style.animation = "fadeIn 1s forwards";
+        }
+
+        // Function to handle answer selection
+        function handleAnswer(selectedAnswer) {
+            const correctAnswer = questions[currentQuestionIndex].correctAnswer;
+            if (selectedAnswer === correctAnswer) {
+                score++;
+            }
+            currentQuestionIndex++;
+            displayQuestion();
+        }
+
+        // Show final score
+        function showResult() {
+            document.getElementById("quiz").style.animation = "fadeOut 1s forwards";
+            setTimeout(() => {
+                document.getElementById("quiz").style.display = "none";
+                document.getElementById("result").style.display = "block";
+                document.getElementById("result").innerText = `You got ${score} out of ${questions.length} questions right!`;
+            }, 1000);
+        }
+
+        // Initialize the quiz
+        window.onload = () => {
+            displayQuestion();
+        }
+    </script>
+</body>
+</html>
